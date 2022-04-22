@@ -2,7 +2,8 @@ import React from "react";
 import Todo from "./components/Todo";
 import { useRef, useState, useEffect } from "react";
 
-export const url = "Backend deployment URL from Heroku"; 
+export const url =
+  "postgres://yvmplaabogzred:2d4c3e7c13386f4eb112a60f76147d6734f192b7a58baacf37f78354c6db92fd@ec2-3-224-125-117.compute-1.amazonaws.com:5432/d9rk7qs7ji3j32";
 
 function App() {
   const [todoList, setTodoList] = useState([]);
@@ -12,10 +13,10 @@ function App() {
   function getItems() {
     setIsLoading(true);
     fetch(url, {
-      method: "GET"
+      method: "GET",
     })
       .then((response) => {
-        return response.json()
+        return response.json();
       })
       .then((response) => {
         const newList = [...response.todo_list];
@@ -29,22 +30,24 @@ function App() {
     const addUrl = url;
     const contentInput = todoContentRef.current.value;
     const addData = {
-      title:contentInput
+      title: contentInput,
     };
     fetch(addUrl, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(addData)
-    }).then((response) => {
-        if(!response.ok) {
-          alert('Add failed');
+      body: JSON.stringify(addData),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          alert("Add failed");
         } else {
           return response.json();
         }
-    }).then(response => {
+      })
+      .then((response) => {
         event.target.reset();
         getItems();
-    });
+      });
   }
 
   useEffect(getItems, []);
@@ -66,7 +69,15 @@ function App() {
         <p>Loading...</p>
       ) : (
         todoList.map((item) => {
-          return <Todo key={item.id} id={item.id} title={item.title} completed={item.completed} getItems={getItems}/>;
+          return (
+            <Todo
+              key={item.id}
+              id={item.id}
+              title={item.title}
+              completed={item.completed}
+              getItems={getItems}
+            />
+          );
         })
       )}
     </div>
